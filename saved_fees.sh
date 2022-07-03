@@ -128,7 +128,7 @@ main()
   #show fee stats
   printf 'Fees paid: %f sats in %i LN payments\n' $fees_paid_sats $PAYMENTS_MADE
   printf 'Onchain fees avoided: %f sats\n' $fees_avoided_sats
-  printf '%s\n', "-----------------------------"
+  printf '%s\n' "-----------------------------"
   printf 'Fees saved: %f sats\n' $fees_saved_sats
 }
 
