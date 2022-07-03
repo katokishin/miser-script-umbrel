@@ -40,15 +40,18 @@ prepopulate_csv()
 {
   cursor=499968
   cur_block=$($bitcoin_cli_path getblockcount | sed 's/[[:cntrl:]]//g')
-  printf 'Current block: %s' "$cur_block"
+  printf 'Current block: %s\n' "$cur_block"
   #block 499968 is the last difficulty adjustment before LN mainnet launch
   #adding current block as latest reference point
+  printf '%s\n' "Populating CSV with difficulty epochs:"
   while [ $cursor -lt $((cur_block)) ]; do
+    printf '%i ' $cursor
     #add block to CSV
     add_to_csv $cursor
     #add 2016 to cursor
     cursor=$((cursor+2016))
   done
+  printf '%s\n' "done"
   add_to_csv $cur_block
 }
 
@@ -73,7 +76,7 @@ recursive_find()
          "SELECT blockheight FROM timestamps WHERE time > $1 ORDER BY time ASC LIMIT 1")
   #if AFTER does not exist, print "too recent, fee not finalized"
   if [ -z $after ]; then
-    echo "Tx too recent, wait for next block to calculate savings"
+    printf "\n%s\n" "Tx too recent, wait for next block to calculate savings"
     return 0
   fi
     
@@ -84,6 +87,7 @@ recursive_find()
     #update onchain fees avoided
     get_avoided_fee $1 $after     
   else
+    printf "%s" "."
     #else, get middle of range to continue
     sum=$((b4+after))
     middle=$((sum/2))
@@ -99,6 +103,7 @@ get_avoided_fee()
   onchain_fee_sats=$(($($bitcoin_cli_path getblockstats $2 | jq -r ".feerate_percentiles[1]")*141))
   onchain_fee_msats=$((onchain_fee_sats*1000))
   FEES_AVOIDED=$((FEES_AVOIDED+onchain_fee_msats))
+  printf "%i sat onchain fee avoided!\n" $onchain_fee_sats
 }
 
 #main logic
@@ -121,10 +126,10 @@ main()
   fees_saved_sats=$(awk "BEGIN {print ($FEES_AVOIDED-$FEES_PAID)/1000}")
 
   #show fee stats
-  printf 'Fees paid: %f sats in %i LN payments\n', $fees_paid_sats, $PAYMENTS_MADE
-  printf 'Onchain fees avoided: %f sats\n', $fees_avoided_sats
-  printf '-----------------------------\n'
-  printf 'Fees saved: %f sats\n', $fees_saved_sats
+  printf 'Fees paid: %f sats in %i LN payments\n' $fees_paid_sats $PAYMENTS_MADE
+  printf 'Onchain fees avoided: %f sats\n' $fees_avoided_sats
+  printf '%s\n', "-----------------------------"
+  printf 'Fees saved: %f sats\n' $fees_saved_sats
 }
 
 main
