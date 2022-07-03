@@ -16,8 +16,11 @@ if [ -e ./bin/bitcoin-cli ]; then
 fi
 
 #global vars
+#miser=25th %ile, normie=50th %ile, ape=90th %ile
 FEES_PAID=0
-FEES_AVOIDED=0
+FEES_AVOIDED_MISER=0
+FEES_AVOIDED_NORMIE=0
+FEES_AVOIDED_APE=0
 PAYMENTS_MADE=0
 
 #add block specified by blockheight to the csv file
@@ -100,10 +103,16 @@ recursive_find()
 get_avoided_fee()
 {
   #calculate onchain fee
-  onchain_fee_sats=$(($($bitcoin_cli_path getblockstats $2 | jq -r ".feerate_percentiles[1]")*141))
-  onchain_fee_msats=$((onchain_fee_sats*1000))
-  FEES_AVOIDED=$((FEES_AVOIDED+onchain_fee_msats))
-  printf "%i sat onchain fee avoided!\n" $onchain_fee_sats
+  onchain_fee_sats_miser=$(($($bitcoin_cli_path getblockstats $2 | jq -r ".feerate_percentiles[1]")*141))
+  onchain_fee_sats_normie=$(($($bitcoin_cli_path getblockstats $2 | jq -r ".feerate_percentiles[2]")*141))
+  onchain_fee_sats_ape=$(($($bitcoin_cli_path getblockstats $2 | jq -r ".feerate_percentiles[4]")*141))
+  onchain_fee_msats_miser=$((onchain_fee_sats_miser*1000))
+  onchain_fee_msats_normie=$((onchain_fee_sats_normie*1000))
+  onchain_fee_msats_ape=$((onchain_fee_sats_ape*1000))
+  FEES_AVOIDED_MISER=$((FEES_AVOIDED_MISER+onchain_fee_msats_miser))
+  FEES_AVOIDED_NORMIE=$((FEES_AVOIDED_NORMIE+onchain_fee_msats_normie))
+  FEES_AVOIDED_APE=$((FEES_AVOIDED_APE+onchain_fee_msats_ape))
+  printf "%i / %i / %i sat onchain fee avoided!\n" $onchain_fee_sats_miser $onchain_fee_sats_normie $onchain_fee_sats_ape
 }
 
 #main logic
@@ -120,16 +129,18 @@ main()
     recursive_find $(echo $row | jq -r ".time" | head -c 10)
   done
 
-  #convert display values to sats
-  fees_paid_sats=$(awk "BEGIN {print $FEES_PAID/1000}")
-  fees_avoided_sats=$(awk "BEGIN {print $FEES_AVOIDED/1000}")
-  fees_saved_sats=$(awk "BEGIN {print ($FEES_AVOIDED-$FEES_PAID)/1000}")
-
   #show fee stats
-  printf 'Fees paid: %f sats in %i LN payments\n' $fees_paid_sats $PAYMENTS_MADE
-  printf 'Onchain fees avoided: %f sats\n' $fees_avoided_sats
   printf '%s\n' "-----------------------------"
-  printf 'Fees saved: %f sats\n' $fees_saved_sats
+  printf 'You paid %f sats in %i LN payments\n' $(awk "BEGIN {print $FEES_PAID/1000}") $PAYMENTS_MADE
+  printf '%s\n' "-----------------------------"
+  printf 'Misers avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_MISER/1000}")
+  printf 'saving a total of %f sats\n' $(awk "BEGIN {print ($FEES_AVOIDED_MISER-$FEES_PAID)/1000}")
+  printf '%s\n' "-----------------------------"
+  printf 'Normies avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_NORMIE/1000}")
+  printf 'saving a total of %f sats\n' $(awk "BEGIN {print ($FEES_AVOIDED_NORMIE-$FEES_PAID)/1000}")
+  printf '%s\n' "-----------------------------"
+  printf 'Apes avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_APE/1000}")
+  printf 'saving a total of %f sats\n' $(awk "BEGIN {print ($FEES_AVOIDED_APE-$FEES_PAID)/1000}")
 }
 
 main
