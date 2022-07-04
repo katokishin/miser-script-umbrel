@@ -88,12 +88,12 @@ recursive_find()
   #if $after is next to $b4, $after is the block we want
   if [ $after -eq $((b4+1)) ]; then
     #update onchain fees avoided
-    get_avoided_fee $1 $after
+    get_avoided_fee $after
   #$after may be BEFORE $b4 if the timestamps are inverted.
   #in that case, the fee we want is that of $b4
-  elif [ $after -eq $((bf-1)) ]; then
+  elif [ $after -eq $((b4-1)) ]; then
     #update onchain fees avoided
-    get_avoided_fee $1 $b4
+    get_avoided_fee $b4
   #else, get middle of range to continue
   else
     printf "%s" "."
@@ -108,9 +108,9 @@ recursive_find()
 get_avoided_fee()
 {
   #calculate onchain fee
-  onchain_fee_sats_miser=$(($($bitcoin_cli_path getblockstats $2 | jq -r ".feerate_percentiles[1]")*141))
-  onchain_fee_sats_normie=$(($($bitcoin_cli_path getblockstats $2 | jq -r ".feerate_percentiles[2]")*141))
-  onchain_fee_sats_ape=$(($($bitcoin_cli_path getblockstats $2 | jq -r ".feerate_percentiles[4]")*141))
+  onchain_fee_sats_miser=$(($($bitcoin_cli_path getblockstats $1 | jq -r ".feerate_percentiles[1]")*141))
+  onchain_fee_sats_normie=$(($($bitcoin_cli_path getblockstats $1 | jq -r ".feerate_percentiles[2]")*141))
+  onchain_fee_sats_ape=$(($($bitcoin_cli_path getblockstats $1 | jq -r ".feerate_percentiles[4]")*141))
   onchain_fee_msats_miser=$((onchain_fee_sats_miser*1000))
   onchain_fee_msats_normie=$((onchain_fee_sats_normie*1000))
   onchain_fee_msats_ape=$((onchain_fee_sats_ape*1000))
