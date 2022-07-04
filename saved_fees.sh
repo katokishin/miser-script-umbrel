@@ -88,10 +88,15 @@ recursive_find()
   #if $after is next to $b4, $after is the block we want
   if [ $after -eq $((b4+1)) ]; then
     #update onchain fees avoided
-    get_avoided_fee $1 $after     
+    get_avoided_fee $1 $after
+  #$after may be BEFORE $b4 if the timestamps are inverted.
+  #in that case, the fee we want is that of $b4
+  elif [ $after -eq $((bf-1)) ]; then
+    #update onchain fees avoided
+    get_avoided_fee $1 $b4
+  #else, get middle of range to continue
   else
     printf "%s" "."
-    #else, get middle of range to continue
     sum=$((b4+after))
     middle=$((sum/2))
     add_to_csv $middle
