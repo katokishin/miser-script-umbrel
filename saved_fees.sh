@@ -138,13 +138,13 @@ main()
   printf '%s\n' "-----------------------------"
   printf 'You paid %f sats in %i LN payments\n' $(awk "BEGIN {print $FEES_PAID/1000}") $PAYMENTS_MADE
   printf '%s\n' "-----------------------------"
-  printf 'Misers avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_MISER/1000}")
+  printf 'Misers (25th %ile) avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_MISER/1000}")
   printf 'saving a total of %f sats\n' $(awk "BEGIN {print ($FEES_AVOIDED_MISER-$FEES_PAID)/1000}")
   printf '%s\n' "-----------------------------"
-  printf 'Normies avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_NORMIE/1000}")
+  printf 'Normies (50th %ile) avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_NORMIE/1000}")
   printf 'saving a total of %f sats\n' $(awk "BEGIN {print ($FEES_AVOIDED_NORMIE-$FEES_PAID)/1000}")
   printf '%s\n' "-----------------------------"
-  printf 'Apes avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_APE/1000}")
+  printf 'Apes (90th %ile) avoided: %f sats,\n' $(awk "BEGIN {print $FEES_AVOIDED_APE/1000}")
   printf 'saving a total of %f sats\n' $(awk "BEGIN {print ($FEES_AVOIDED_APE-$FEES_PAID)/1000}")
 }
 

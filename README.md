@@ -30,6 +30,15 @@ $Umbrel/    chmod +x fees_saved.sh
 $Umbrel/    ./fees_saved.sh
 ```
 
+Non-Umbrel users can also use the script by making a tiny change, as long
+as they also use bitcoind and lnd.
+
+saved_fees.sh lines 8 & 9:
+```
+lncli_path="lncli"                 // or absolute path to the executable
+bitcoin_cli_path="bitcoin-cli"     // or absolute path to the executable
+```
+
 ### How it works
 
 Onchain fee estimation is done by assuming all onchain payments would have been
@@ -71,6 +80,15 @@ $Umbrel/    cp miser-script-umbrel/block_timestamps.csv block_timestamps.csv
 # スクリプトを実行可能にして、実行します
 $Umbrel/    chmod +x fees_saved.sh
 $Umbrel/    ./fees_saved.sh
+```
+
+Umbrelを使っていなくても、bitcoind & lndのユーザーは下記の部分を書き換えることで
+このスクリプトが使えます。
+
+saved_fees.sh 8 & 9行目:
+```
+lncli_path="lncli"                 // もしくは実行ファイルへの絶対パス
+bitcoin_cli_path="bitcoin-cli"     // もしくは実行ファイルへの絶対パス
 ```
 
 ### 仕組み
