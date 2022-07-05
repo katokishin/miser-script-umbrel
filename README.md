@@ -30,14 +30,9 @@ $Umbrel/    chmod +x fees_saved.sh
 $Umbrel/    ./fees_saved.sh
 ```
 
-Non-Umbrel users can also use the script by making a tiny change, as long
-as they also use bitcoind and lnd.
-
-saved_fees.sh lines 8 & 9:
-```
-lncli_path="lncli"                 // or absolute path to the executable
-bitcoin_cli_path="bitcoin-cli"     // or absolute path to the executable
-```
+Non-Umbrel users can also use the script by typing in the path to `lncli` and
+`bitcoin-cli` when the script asks for these paths. The script also checks if
+`lncli` and `bitcoin-cli` can be found in $PATH.
 
 ### How it works
 
@@ -82,14 +77,9 @@ $Umbrel/    chmod +x fees_saved.sh
 $Umbrel/    ./fees_saved.sh
 ```
 
-Umbrelを使っていなくても、bitcoind & lndのユーザーは下記の部分を書き換えることで
-このスクリプトが使えます。
-
-saved_fees.sh 8 & 9行目:
-```
-lncli_path="lncli"                 // もしくは実行ファイルへの絶対パス
-bitcoin_cli_path="bitcoin-cli"     // もしくは実行ファイルへの絶対パス
-```
+Umbrelユーザー以外も、`bitcoin-cli`と`lncli`のパスを聞かれるので、入力することで
+利用できます。`bitcoin-cli`、`lncli`コマンドがそのまま使える環境では、入力する
+必要もありません。
 
 ### 仕組み
 
