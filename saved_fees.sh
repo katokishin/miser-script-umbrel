@@ -7,6 +7,27 @@ echo "This script uses sqlite3. If you don't have it, install with 'apt install 
 #get command paths for Umbrel <0.5 and 0.5^
 lncli_path="./scripts/app compose lightning exec lnd lncli"
 bitcoin_cli_path="./scripts/app compose bitcoin exec bitcoind bitcoin-cli"
+
+printf 'Checking for lncli path ...\n'
+if [ -z "$($lncli_path listpayments 2>/dev/null)" ]; then
+        lncli_path="lncli"
+        while [ -z "$($lncli_path listpayments 2>/dev/null)" ]; do
+                printf 'lncli not found.\n'
+                read -p "Please enter lncli path: " lncli_path
+        done
+fi
+printf 'lncli found at: %s\n' "$lncli_path"
+
+printf 'Checking for bitcoin-cli path ...\n'
+if [ -z "$($bitcoin_cli_path getblockcount 2>/dev/null)" ]; then
+        bitcoin_cli_path="bitcoin-cli"
+        while [ -z "$($bitcoin_cli_path getblockcount 2>/dev/null)" ]; do
+                printf 'bitcoin-cli not found.\n'
+                read -p "Please enter bitcoin-cli path: " bitcoin_cli_path
+        done
+fi
+printf 'bitcoin-cli found at: %s\n' "$bitcoin_cli_path"
+
 if [ -e ./bin/lncli ]; then
   lncli_path="./bin/lncli"
 fi
