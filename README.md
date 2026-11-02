@@ -1,5 +1,5 @@
 # miser-script-umbrel
-日本語版は下部にあります。
+日本語版は下部にあります、E
 
 ## English
 
@@ -8,7 +8,7 @@ much your wallet has saved in transaction fees by using LN!
 
 ### How to use
 
-Umbrel users (versions 4 and 5) should put `fees_saved.sh` in their Umbrel root
+Umbrel users (versions 4 and 5) should put `saved_fees.sh` in their Umbrel root
 directory, make it executable, and run it as follows:
 
 ```
@@ -19,15 +19,15 @@ $Umbrel/    apt install sqlite3
 
 # Clone this repo and copy the necessary files
 $Umbrel/    git clone https://github.com/katokishin/miser-script-umbrel
-$Umbrel/    cp miser-script-umbrel/fees_saved.sh fees_saved.sh
+$Umbrel/    cp miser-script-umbrel/saved_fees.sh saved_fees.sh
 
 # Optional: copy the block_timestamps.csv to save your CPU a few minutes.
 # Otherwise the script will generate it automatically.
 $Umbrel/    cp miser-script-umbrel/block_timestamps.csv block_timestamps.csv
 
 # Make the script executable, and run it
-$Umbrel/    chmod +x fees_saved.sh
-$Umbrel/    ./fees_saved.sh
+$Umbrel/    chmod +x saved_fees.sh
+$Umbrel/    ./saved_fees.sh
 ```
 
 Non-Umbrel users can also use the script by typing in the path to `lncli` and
@@ -49,49 +49,49 @@ are chronological.
 
 Finally, we calculate `(total on-chain hypothetical fees) - (total LN fees)`.
 
-## 日本語
-`bitcoin-cli`と`lncli`を利用して、ライトニングウォレットの履歴から累計でオンチェーン
-取引と比べてどれくらいの手数料を節約できたか表示するスクリプトです。
+## 日本誁E
+`bitcoin-cli`と`lncli`を利用して、ライトニングウォレチE��の履歴から累計でオンチェーン
+取引と比べてどれくらいの手数料を節紁E��きたか表示するスクリプトです、E
 
-### 使い方
+### 使ぁE��
 
-Umbrelユーザー(バージョン４および５に対応)は、`fees_saved.sh`を
-Umbrelのルートディレクトリに入れて実行してください。
+Umbrelユーザー(バ�Eジョン�E�およ�E�E�に対忁Eは、`saved_fees.sh`めE
+Umbrelのルートディレクトリに入れて実行してください、E
 
 ```
-# sqlite3がインストールされているか確認する
+# sqlite3がインスト�EルされてぁE��か確認すめE
 $Umbrel/    sqlite3 --version
-# 何も出力されない場合はインストールされていないので、インストールする
+# 何も出力されなぁE��合�Eインスト�EルされてぁE��ぁE�Eで、インスト�Eルする
 $Umbrel/    apt install sqlite3
 
-# このリポジトリをクローンして、必要なファイルをダウンロードする
+# こ�Eリポジトリをクローンして、忁E��なファイルをダウンロードすめE
 $Umbrel/    git clone https://github.com/katokishin/miser-script-umbrel
-$Umbrel/    cp miser-script-umbrel/fees_saved.sh fees_saved.sh
+$Umbrel/    cp miser-script-umbrel/saved_fees.sh saved_fees.sh
 
-# 時短のためにblock_timestamps.csvもコピーすることができます。
-# コピーしなければスクリプト実行時に自動生成します。
+# 時短のためにblock_timestamps.csvもコピ�Eすることができます、E
+# コピ�Eしなければスクリプト実行時に自動生成します、E
 $Umbrel/    cp miser-script-umbrel/block_timestamps.csv block_timestamps.csv
 
-# スクリプトを実行可能にして、実行します
-$Umbrel/    chmod +x fees_saved.sh
-$Umbrel/    ./fees_saved.sh
+# スクリプトを実行可能にして、実行しまぁE
+$Umbrel/    chmod +x saved_fees.sh
+$Umbrel/    ./saved_fees.sh
 ```
 
-Umbrelユーザー以外も、`bitcoin-cli`と`lncli`のパスを聞かれるので、入力することで
-利用できます。`bitcoin-cli`、`lncli`コマンドがそのまま使える環境では、入力する
-必要もありません。
+Umbrelユーザー以外も、`bitcoin-cli`と`lncli`のパスを聞かれる�Eで、�E力することで
+利用できます。`bitcoin-cli`、`lncli`コマンドがそ�Eまま使える環墁E��は、�E力すめE
+忁E��もありません、E
 
-### 仕組み
+### 仕絁E��
 
-オンチェーン手数料の推定は、オンチェーン取引のデータサイズを141バイトと仮定しています。
-これは1in2outのP2WPKH (native segwit)トランザクションを想定してのことです。
+オンチェーン手数料�E推定�E、オンチェーン取引�EチE�EタサイズめE41バイトと仮定してぁE��す、E
+これは1in2outのP2WPKH (native segwit)トランザクションを想定してのことです、E
 
-手数料率に関しては、LNで送金を行った時点から次のブロックの、下から25%の手数料率を
-採用しました。あくまでケチ(miser)めな設定です。
+手数料率に関しては、LNで送E��を行った時点から次のブロチE��の、下かめE5%の手数料率めE
+採用しました。あくまでケチEmiser)めな設定です、E
 
-ビットコインのブロックに含まれるタイムスタンプは前後が入れ替わることもありますが、 
-`bitcoin-cli getblockstats`の実行時間が長いので、余分にブロックを取得して精度を上げる
-ことより、タイムスタンプが時系列であると仮定したロジックを採用しました。
+ビットコインのブロチE��に含まれるタイムスタンプ�E前後が入れ替わることもありますが、E
+`bitcoin-cli getblockstats`の実行時間が長ぁE�Eで、余�EにブロチE��を取得して精度を上げめE
+ことより、タイムスタンプが時系列であると仮定したロジチE��を採用しました、E
 
-これらのデータから、`(オンチェーン送金なら払ったであろう手数料) - (LNで実際に払った手数料)`
-を求めました。
+これら�EチE�Eタから、`(オンチェーン送E��なら払ったであろぁE��数斁E - (LNで実際に払った手数斁E`
+を求めました、E
